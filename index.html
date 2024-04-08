@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Sign-up Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: rgb(101, 87, 69); 
+    color: white;
+  }
+
+  .container {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  form {
+    width: 400px;
+    padding: 20px;
+    border: 2px solid rgb(47, 74, 47);
+    border-radius: 10px;
+    margin-right: 20px; 
+    background-color: rgb(74, 109, 74);
+    color: black; /* Changed font color to black */
+  }
+
+  form fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  form legend {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  form div {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center; 
+  }
+
+  label {
+    width: 100px;
+    margin-right: 10px; 
+    color: black; /* Changed font color to black */
+  }
+
+  input[type="text"],
+  input[type="email"],
+  select,
+  input[type="number"],
+  input[type="password"],
+  textarea {
+    flex: 1; 
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    color: black; /* Changed font color to black */
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center; 
+    margin-top: 5px; 
+  }
+
+  .checkbox-container label {
+    margin-left: 5px; 
+    color: black; /* Changed font color to black */
+  }
+
+  button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #176fcd;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  button[type="reset"] {
+    background-color: #a00f1d;
+  }
+
+  .error {
+    border: 1px solid red;
+  }
+
+  .success {
+    border: 1px solid green;
+  }
+
+  #output {
+    margin-top: 20px;
+    width: 400px;
+    padding: 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+  }
+
+  .info-box p {
+    margin: 0 0 10px 0;
+  }
+
+  .info-box h2 {
+    margin-top: 0;
+  }
+
+  .warning {
+    display: none; 
+    color: red;
+  }
+</style>
+</head>
+<body>
+  <form id="signupForm" onsubmit="submitForm(event)">
+    <fieldset>
+      <legend>Sign-up Form</legend>
+      <div>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" onblur="validateInput(this)" onfocus="clearBorder(this)">
+      </div>
+      <div>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" onblur="validateInput(this)" onfocus="clearBorder(this)">
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" onblur="validateEmail(this)" onfocus="clearBorder(this)">
+        <p id="emailWarning" class="warning">Please enter a valid email address.</p>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" onblur="validateInput(this)" onfocus="clearBorder(this)">
+      </div>
+      <div class="checkbox-container">
+        <input type="checkbox" id="showPassword" onchange="togglePassword()">
+        <label for="showPassword">Show Password</label>
+      </div>
+      <div>
+        <label for="gender">Gender:</label>
+        <select id="gender">
+          <option value="" selected disabled hidden>Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Prefer not to mention">Prefer not to mention</option>
+        </select>
+      </div>
+      <div>
+        <label for="age">Age:</label>
+        <input type="number" id="age" placeholder="Enter your age" min="0"> 
+      </div>
+      <div>
+        <label for="interests">Interest:</label>
+        <textarea id="interests" rows="4" onblur="validateInput(this)" onfocus="clearBorder(this)"></textarea>
+      </div>
+      <button type="submit" id="submitBtn">Submit</button>
+      <button type="reset" onclick="clearForm()">Reset</button>
+    </fieldset>
+  </form>
+  <div id="output">
+    <h2>Information:</h2>
+  </div>
+  
+  <script>
+    function validateInput(input) {
+      if (input.value === "") {
+        input.classList.add("error");
+      } else {
+        input.classList.remove("error");
+        input.classList.add("success");
+      }
+    }
+
+    function clearBorder(input) {
+      input.classList.remove("error");
+    }
+
+    function validateEmail(emailInput) {
+      const emailValue = emailInput.value;
+      const emailWarning = document.getElementById("emailWarning");
+      if (emailValue === "") {
+        emailInput.classList.add("error");
+        emailWarning.textContent = "Email is required.";
+        emailWarning.style.display = "block"; 
+      } else if (!emailValue.includes("@gmail.com")) {
+        emailInput.classList.add("error");
+        emailWarning.textContent = "Please enter a Gmail address.";
+        emailWarning.style.display = "block"; 
+      } else {
+        emailInput.classList.remove("error");
+        emailInput.classList.add("success");
+        emailWarning.style.display = "none"; 
+      }
+    }
+
+    function togglePassword() {
+      const passwordInput = document.getElementById("password");
+      const showPasswordCheckbox = document.getElementById("showPassword");
+      if (showPasswordCheckbox.checked) {
+        passwordInput.type = "text";
+      } else {
+        passwordInput.type = "password";
+      }
+    }
+
+    function submitForm(event) {
+      event.preventDefault();
+
+      const firstName = document.getElementById("firstName").value;
+      const lastName = document.getElementById("lastName").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const gender = document.getElementById("gender").value;
+      const age = document.getElementById("age").value;
+      const interests = document.getElementById("interests").value;
+
+      const outputDiv = document.getElementById("output");
+      outputDiv.innerHTML = `<h2>Information:</h2>
+                             <p>First Name: ${firstName}</p>
+                             <p>Last Name: ${lastName}</p>
+                             <p>Email: ${email}</p>
+                             <p>Password: ${password}</p>
+                             <p>Gender: ${gender}</p>
+                             <p>Age: ${age}</p>
+                             <p>Interests: ${interests}</p>`;
+    }
+
+    function clearForm() {
+      document.getElementById("signupForm").reset();
+      document.getElementById("output").innerHTML = "<h2>Information:</h2>"; 
+      document.getElementById("emailWarning").textContent = "";
+      document.getElementById("emailWarning").style.display = "none"; 
+    }
+  </script>
+</body>
+</html>
